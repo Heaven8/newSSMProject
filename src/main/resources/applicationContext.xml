@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+      http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+      http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd
+      http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+
+    <!--自动扫描-->
+    <context:component-scan base-package="com.zhanghf.curd"></context:component-scan>
+
+    <!-- Spring的配置文件，这里主要配置和业务逻辑有关的 -->
+    <!-- 加载一个properties文件 -->
+    <bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="classpath:dbconfig.properties"/>
+    </bean>
+
+    <!--配置数据源-->
+    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
+        <property name="driverClass" value="${driver}"/>
+        <property name="jdbcUrl" value="${url}"/>
+        <property name="user" value="${username}"/>
+        <property name="password" value="${password}"/>
+
+        <property name="maxPoolSize" value="50"></property>
+        <property name="minPoolSize" value="10"></property>
+        <property name="initialPoolSize" value="10"></property>
+        <property name="maxIdleTime" value="25000"></property>
+        <property name="acquireIncrement" value="1"></property>
+        <property name="acquireRetryAttempts" value="30"></property>
+        <property name="acquireRetryDelay" value="1000"></property>
+        <property name="testConnectionOnCheckin" value="true"></property>
+        <property name="idleConnectionTestPeriod" value="18000"></property>
+        <property name="checkoutTimeout" value="5000"></property>
+        <property name="automaticTestTable" value="t_c3p0"></property>
+    </bean>
+
+    <!-- mybatis和spring整合，不需要mybatis的配置映射文件 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <!-- 自动扫描mapping.xml文件 -->
+        <property name="mapperLocations" value="classpath:mapper/*.xml"></property>
+    </bean>
+
+    <!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.zhanghf.curd.dao"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory"></property>
+    </bean>
+
+    <!-- 配置一个可以执行批量的sqlSession -->
+    <bean id="sqlSession" class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg name="sqlSessionFactory" ref="sqlSessionFactory"></constructor-arg>
+        <constructor-arg name="executorType" value="BATCH"></constructor-arg>
+    </bean>
+
+
+
+    <!-- Spring配置文件的核心点（数据源、与mybatis的整合，事务控制） -->
+</beans>
