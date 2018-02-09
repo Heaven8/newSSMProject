@@ -4,6 +4,6 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.zhanghf.curd.dao.UserDao">
     <select id="getAll" resultType="com.zhanghf.curd.bean.User">
-        select * from tb_user
+        select userId,userName,password userPassword from tb_user
     </select>
 </mapper>

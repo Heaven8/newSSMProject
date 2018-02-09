@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhanghf.curd.dao.DeptDao">
+    <resultMap id="departResulMap" type="com.zhanghf.curd.bean.Dept" >
+        <id column="dept_id" property="dept_id"/>
+        <result column="dept_name" property="dept_name"/>
+        <!-- 使用collection将employee实体类中字段属性嵌套进来 -->
+        <collection column="dept_id" property="employeeList" ofType="com.zhanghf.curd.bean.Employee" >
+            <id column="emp_id" property="emp_id"></id>
+            <result column="emp_name" property="emp_name"></result>
+            <result column="gender" property="gender"></result>
+            <result column="email" property="email"></result>
+            <result column="dept_id" property="dept_id"></result>
+        </collection>
+    </resultMap>
+
+    <select id="getDepts" parameterType="int" resultMap="departResulMap">
+        <!-- 查询根据部门id查询有那些员工在其部门 -->
+        select a.dept_id,a.dept_name,b.emp_id,b.emp_name,b.gender,b.email,b.dept_id from tbl_dept a
+        right join tbl_emp b
+        on a.dept_id = b.dept_id
+    </select>
+</mapper>
