@@ -82,4 +82,39 @@ public class UserController {
         return "success";
     }
 
+    /**
+     * 跳转到主页
+     * @return
+     */
+    @RequestMapping("toHome")
+    public String toHome(){
+        return "home";
+    }
+
+    /**
+     * 跳转到新闻中心
+     * @return
+     */
+    @RequestMapping("toNews")
+    public String toNews(){
+        return "news";
+    }
+
+    /**
+     * 关于公司
+     */
+    @RequestMapping("companyIntroduce")
+    public String companyIntroduce(){
+       return "companyIntroduce";
+    }
+
+    /**
+     * 产品服务
+     * @return
+     */
+    @RequestMapping("productService")
+    public String productService(){
+        return "productService";
+    }
+
 }

@@ -29,4 +29,8 @@ function jsonTest(){
         })
     }
 
+function toHome(){
+    location.href = document.getElementsByTagName('base')[0].href+"toHome";
+}
+
 
